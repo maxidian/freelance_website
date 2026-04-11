@@ -51,9 +51,7 @@ body {
 nav {
   position: fixed; top: 0; left: 0; right: 0;
   z-index: 900;
-  background: rgba(255,255,255,0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: #ffffff;
   border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
@@ -121,24 +119,20 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(26,58,92,0.10); }
 .nav-mobile {
   position: fixed;
   top: 66px; left: 0; right: 0;
-  background: rgba(255,255,255,0.99);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  background: #ffffff;
+  border-top: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
   z-index: 9999;
-  /* Use visibility+opacity for animatable show/hide */
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-6px);
-  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
-  box-shadow: 0 8px 32px rgba(26,58,92,0.14);
+  transition: opacity 0.18s ease, visibility 0.18s;
+  box-shadow: 0 6px 24px rgba(26,58,92,0.12);
 }
 .nav-mobile.open {
   visibility: visible;
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
 }
 .nav-mobile ul {
   list-style: none;
