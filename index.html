@@ -30,7 +30,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
 html { overflow-x: hidden; }
 
@@ -741,6 +741,7 @@ footer {
 
 /* Tablet portrait / large phones */
 @media (max-width: 900px) {
+  html { scroll-padding-top: 74px; }
   /* Nav */
   nav { padding: 0 20px; height: 60px; }
   .nav-links { display: none; }
@@ -836,6 +837,7 @@ footer {
 
 /* Small phones */
 @media (max-width: 480px) {
+  html { scroll-padding-top: 70px; }
   nav { height: 56px; padding: 0 16px; }
   .nav-mobile { top: 56px; }
   .nav-logo { font-size: 16px; }
@@ -1372,28 +1374,32 @@ const navToggle = document.getElementById('navToggle');
 const navMobile = document.getElementById('navMobile');
 let menuOpen = false;
 
-navToggle.addEventListener('click', () => {
-  menuOpen = !menuOpen;
-  navToggle.setAttribute('aria-expanded', menuOpen);
-  navMobile.classList.toggle('open', menuOpen);
+function setMenuOpen(open) {
+  menuOpen = open;
+  navToggle.setAttribute('aria-expanded', open);
+  navMobile.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
   const spans = navToggle.querySelectorAll('span');
-  if (menuOpen) {
+  if (open) {
     spans[0].style.transform = 'translateY(7px) rotate(45deg)';
     spans[1].style.opacity = '0';
     spans[2].style.transform = 'translateY(-7px) rotate(-45deg)';
   } else {
     spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
   }
+}
+
+navToggle.addEventListener('click', () => setMenuOpen(!menuOpen));
+
+// Close mobile menu on link click or outside click
+navMobile.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => setMenuOpen(false));
 });
 
-// Close mobile menu on link click
-navMobile.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => {
-    menuOpen = false;
-    navMobile.classList.remove('open');
-    navToggle.setAttribute('aria-expanded', false);
-    navToggle.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
-  });
+document.addEventListener('click', e => {
+  if (menuOpen && !navMobile.contains(e.target) && !navToggle.contains(e.target)) {
+    setMenuOpen(false);
+  }
 });
 
 // Scroll reveal
