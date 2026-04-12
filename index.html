@@ -124,15 +124,22 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(26,58,92,0.10); }
   border-bottom: 2px solid var(--border);
   z-index: 9999;
   visibility: hidden;
-  opacity: 0;
   pointer-events: none;
-  transition: opacity 0.18s ease, visibility 0.18s;
+  /* iOS Safari fix: transform statt opacity, kein Transparenz-Bug */
+  -webkit-transform: translateY(-100%);
+  transform: translateY(-100%);
+  transition: transform 0.22s ease, visibility 0s linear 0.22s;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
   box-shadow: 0 6px 24px rgba(26,58,92,0.12);
 }
 .nav-mobile.open {
   visibility: visible;
-  opacity: 1;
   pointer-events: auto;
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+  transition: transform 0.22s ease, visibility 0s linear 0s;
 }
 .nav-mobile ul {
   list-style: none;
