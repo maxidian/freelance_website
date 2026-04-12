@@ -6,13 +6,20 @@ window.addEventListener('scroll', () => {
 
 // Hamburger menu
 const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
 const navMobile = document.getElementById('navMobile');
+const navMobileList = document.getElementById('navMobileList');
 const navBackdrop = document.getElementById('navBackdrop');
 let menuOpen = false;
+
+function syncMobileNav() {
+  navMobileList.innerHTML = navLinks.innerHTML;
+}
 
 function setMenuOpen(open) {
   menuOpen = open;
   navToggle.setAttribute('aria-expanded', open);
+  navMobile.setAttribute('aria-hidden', String(!open));
   navMobile.classList.toggle('open', open);
   navBackdrop.hidden = !open;
   navBackdrop.classList.toggle('open', open);
@@ -42,12 +49,15 @@ function setMenuOpen(open) {
   }
 }
 
+syncMobileNav();
 navToggle.addEventListener('click', () => setMenuOpen(!menuOpen));
 navBackdrop.addEventListener('click', () => setMenuOpen(false));
 
 // Close mobile menu on link click or outside click
-navMobile.querySelectorAll('a').forEach((a) => {
-  a.addEventListener('click', () => setMenuOpen(false));
+navMobile.addEventListener('click', (e) => {
+  if (e.target.closest('a')) {
+    setMenuOpen(false);
+  }
 });
 
 document.addEventListener('click', (e) => {
@@ -107,26 +117,34 @@ function saveModalCookies() {
   closeCookieModal();
 }
 
+const cookieModal = document.getElementById('cookie-modal');
+
+function handleCookieModalClick(e) {
+  if (e.target === cookieModal) {
+    closeCookieModal();
+  }
+}
+
+function handleCookieModalKeydown(e) {
+  if (e.key === 'Escape') {
+    closeCookieModal();
+  }
+}
+
 function openCookieModal() {
-  const modal = document.getElementById('cookie-modal');
-  modal.classList.add('open');
+  cookieModal.classList.add('open');
   try {
     const stored = JSON.parse(localStorage.getItem(COOKIE_KEY) || '{}');
     document.getElementById('toggle-fonts').checked = stored.fonts || false;
   } catch (e) {}
-  modal.addEventListener('click', function onModalClick(e) {
-    if (e.target === modal) closeCookieModal();
-  }, { once: true });
-  document.addEventListener('keydown', function esc(e) {
-    if (e.key === 'Escape') {
-      closeCookieModal();
-      document.removeEventListener('keydown', esc);
-    }
-  });
+  cookieModal.addEventListener('click', handleCookieModalClick);
+  document.addEventListener('keydown', handleCookieModalKeydown);
 }
 
 function closeCookieModal() {
-  document.getElementById('cookie-modal').classList.remove('open');
+  cookieModal.classList.remove('open');
+  cookieModal.removeEventListener('click', handleCookieModalClick);
+  document.removeEventListener('keydown', handleCookieModalKeydown);
 }
 
 (function init() {
