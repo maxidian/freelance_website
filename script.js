@@ -13,7 +13,9 @@ const navBackdrop = document.getElementById('navBackdrop');
 let menuOpen = false;
 
 function syncMobileNav() {
-  navMobileList.innerHTML = navLinks.innerHTML;
+  if (navLinks && navMobileList) {
+    navMobileList.innerHTML = navLinks.innerHTML;
+  }
 }
 
 function setMenuOpen(open) {
